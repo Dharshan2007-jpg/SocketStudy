@@ -52,7 +52,58 @@ Socket programming finds applications in various domains, including web developm
 3.	File Transfer Protocol: Protocols like FTP (File Transfer Protocol) utilize socket programming for transferring files between a client and a server.
 4.	Networked Games: Online multiplayer games rely on socket programming to facilitate communication between game clients and servers.
 5.	RPC mechanisms: which allow processes to execute code on a remote server, often use socket programming for communication.
+## PROGRAM:
+```
+import socket
+import threading
+import time
 
+def server_implementation():
+    server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    server.bind(('127.0.0.1', 7000))
+    server.listen(1)
+    print("[SERVER]: Local server is active and listening...")
+
+    conn, addr = server.accept()
+    print(f"[SERVER]: Connection established with {addr}")
+
+    incoming_msg = conn.recv(1024).decode()
+    print(f"[SERVER]: Data received: '{incoming_msg}'")
+
+    conn.send("Message received successfully!".encode())
+    
+    conn.close()
+    server.close()
+
+def client_implementation():
+   
+    time.sleep(1)
+ 
+    client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    client.connect(('127.0.0.1', 7000))
+    print("[CLIENT]: Connected to the server.")
+
+    secret_msg = "Socket programming is functional."
+    print(f"[CLIENT]: Sending: '{secret_msg}'")
+    client.send(secret_msg.encode())
+
+    confirmation = client.recv(1024).decode()
+    print(f"[CLIENT]: Server says: '{confirmation}'")
+
+    client.close()
+
+if __name__ == "__main__":
+  
+    server_thread = threading.Thread(target=server_implementation)
+    client_thread = threading.Thread(target=client_implementation)
+
+    server_thread.start()
+    client_thread.start()
+
+    server_thread.join()
+    client_thread.join()
+    print("\n[SYSTEM]: Implementation finished.")
+	```
 
 ## Result:
 Thus the study of Socket Programming Completed Successfully
